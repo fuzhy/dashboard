@@ -25,6 +25,21 @@ import {multiDest} from './common';
 import conf from './conf';
 
 /**
+ * Processes the Docker file and places it in the dist folder for default architecture. --> amd64
+ */
+gulp.task('docker-file', () => {
+    return dockerFile(conf.paths.dist);
+});
+
+/**
+ * Creates head Docker image for default arch -> amd64
+ *
+ */
+gulp.task('docker-image:head', gulp.series('docker-file', () => {
+    return buildDockerImage(lodash.zip([conf.deploy.headImageName], [conf.paths.dist]))
+}));
+
+/**
  * Processes the Docker file and places it in the dist folder for all architectures.
  */
 gulp.task('docker-file:cross', () => {
